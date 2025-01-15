@@ -32,7 +32,7 @@ from sklearn.svm import LinearSVC
 from sklearn.preprocessing import label_binarize
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import StratifiedKFold
-from scipy import interp
+#from scipy import interp
 from scipy.sparse.linalg import svds, eigs
 
 from itertools import cycle
