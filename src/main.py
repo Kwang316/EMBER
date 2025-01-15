@@ -41,7 +41,8 @@ from rep_method import *
 
 
 def init_node_neighbors(node, graph, rep_method, verbose=False):
-    neighbors = np.nonzero(graph.G_adj[node])[-1].tolist()  # ###
+    #neighbors = np.nonzero(graph.G_adj[node])[-1].tolist()  # ###
+    neighbors = graph.G_adj[node, :].nonzero()[1].tolist()
     if len(neighbors) == 0:  # disconnected node
         kneighbors = {0: {node: create_node(node, graph, rep_method)}, 1: {}}
     else:
