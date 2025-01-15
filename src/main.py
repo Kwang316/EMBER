@@ -570,7 +570,7 @@ if __name__ == "__main__":
     print('[gamma] ' + str(gamma))
     print('----------------------------------')
 
-    delimiter = ","
+    delimiter = " "
     if directed:
         nx_graph = nx.read_edgelist(
             graph_file,
