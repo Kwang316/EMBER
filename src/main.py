@@ -42,7 +42,8 @@ from rep_method import *
 
 def init_node_neighbors(node, graph, rep_method, verbose=False):
     #neighbors = np.nonzero(graph.G_adj[node])[-1].tolist()  # ###
-    neighbors = graph.G_adj[node, :].nonzero()[1].tolist()
+    neighbors = graph.G_adj[node, :].tocoo().col.tolist()
+    print('neighbors:', neighbors)
     if len(neighbors) == 0:  # disconnected node
         kneighbors = {0: {node: create_node(node, graph, rep_method)}, 1: {}}
     else:
@@ -170,7 +171,7 @@ def get_khop_neighbors_bfs(graph, rep_method):
             current_node.set_centrality(centrality)
             kneighbors_dict[i][current_layer][current_node.node_id] = current_node
 
-            for neighbor in np.nonzero(graph.G_adj[current_node.node_id])[-1].tolist():
+            for neighbor in graph.G_adj[current_node.node_id, :].tocoo().col.tolist(): #np.nonzero(graph.G_adj[current_node.node_id])[-1].tolist():
                 if neighbor not in visited:
                     visited[neighbor] = current_layer + 1
                     edge_label = None
