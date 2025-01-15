@@ -213,7 +213,7 @@ def get_combined_feature_sequence(graph, rep_method, current_node, gadj = None):
 
 	if graph.weighted:
 		if gadj is None:
-			print "converting sparse array to dict for faster indexing..."
+			print("converting sparse array to dict for faster indexing...")
 			rows, cols = graph.G_adj.nonzero()
 			data = np.ravel(graph.G_adj[rows, cols])
 			A = zip(rows, cols)
@@ -259,7 +259,7 @@ def get_combined_feature_sequence(graph, rep_method, current_node, gadj = None):
 					else:
 						features[i][min(bucket_index, len(features[i]) - 1)] += (rep_method.alpha ** layer) * weight
 			except Exception as e:
-				print "Exception:", e
+				print("Exception:", e)
 				print("Node %d has %s value %d and will not contribute to feature distribution" % (khop_neighbor, feature, node_feature))
 		#print("# kneighbors at layer %d: %d" % (layer, kn_count))
 	combined_feature_vector = features[0]
@@ -342,7 +342,7 @@ def get_sample_nodes(graph, rep_method, verbose = True, nodes_to_embed = None):
 	#Sample uniformly at random
 	#OPTION sample according to levesrage scores or some more sophisticated measure
 	if verbose:
-		print "embed: ", nodes_to_embed
+		print("embed: ", nodes_to_embed)
 	if nodes_to_embed is not None:
 		num_nodes = len(nodes_to_embed)
 
@@ -416,7 +416,7 @@ def get_feature_dimensionality(graph, rep_method, verbose = True, nodes_to_embed
 		num_nodes = len(nodes_to_embed)
 	p = int(rep_method.k*math.log(num_nodes, 2)) #k*log(n), where k = 10
 	if verbose:
-		print "feature dimensionality is ", min(p, num_nodes)
+		print("feature dimensionality is ", min(p, num_nodes))
 	rep_method.p = min(p,num_nodes)
 	return rep_method.p #don't return larger dimensionality than # of nodes
 
@@ -430,9 +430,9 @@ def get_representations(graph, rep_method, verbose = True, return_rep_method = F
 		graph.max_degree = rep_method.p #so that we can get degseqs of an arbitrary length (basically by padding with 0s)
 
 	if verbose:
-		print "Until layer: ", rep_method.max_layer
-		print "sampling method: ", rep_method.sampling_method
-		print "attribute class sizes: ", graph.attribute_class_sizes
+		print("Until layer: ", rep_method.max_layer)
+		print("sampling method: ", rep_method.sampling_method)
+		print("attribute class sizes: ", graph.attribute_class_sizes)
 	
 	#Explicitly featurize the nodes
 	feature_matrix = get_features(graph, rep_method, verbose, nodes_to_embed)
@@ -447,11 +447,11 @@ def get_representations(graph, rep_method, verbose = True, return_rep_method = F
 		feature_matrix = np.hstack((np.dot(feature_matrix, 1), np.dot(indegree_feature_matrix, 17)))
 
 	if verbose:
-		print "Dimensionality in explicit feature space: ", feature_matrix.shape
+		print("Dimensionality in explicit feature space: ", feature_matrix.shape)
 	
 	if rep_method.method == "degseqs": #want explicit featurization of nodes by deg sequences of neighbors
 		if verbose:
-			print "returning explicit features"
+			print("returning explicit features")
 		return feature_matrix
 
 	
@@ -459,7 +459,7 @@ def get_representations(graph, rep_method, verbose = True, return_rep_method = F
 	if rep_method.p is None:
 		rep_method.p = get_feature_dimensionality(graph, rep_method, verbose = verbose) #k*log(n), where k = 10
 	elif rep_method.p > graph.N or (nodes_to_embed is not None and rep_method.p > len(nodes_to_embed)): 
-# 		print "Warning: dimensionality greater than number of nodes to embed. Reducing to n"
+# 		print("Warning: dimensionality greater than number of nodes to embed. Reducing to n")
 		if (nodes_to_embed is not None and rep_method.p > len(nodes_to_embed)):
 			rep_method.p = len(nodes_to_embed)
 		else:
@@ -468,8 +468,8 @@ def get_representations(graph, rep_method, verbose = True, return_rep_method = F
 	
 	landmarks = get_sample_nodes(graph, rep_method, verbose = verbose, nodes_to_embed = nodes_to_embed)
 	if verbose:
-		print "landmark IDs: ", landmarks
-		print feature_matrix.shape
+		print("landmark IDs: ", landmarks)
+		print(feature_matrix.shape)
 
 
 	rep_method.landmarks = feature_matrix[landmarks]
@@ -532,13 +532,13 @@ def get_representations(graph, rep_method, verbose = True, return_rep_method = F
 
 	else:
 		Sapprox = np.dot(np.dot(C, W_pinv), C.T)
-		print "created similarity matrix"
+		print("created similarity matrix")
 
 		#doesn't work since low rank approx can have negative values
 		#nmf = NMF(n_components = W_pinv.shape[0], init='random', random_state=0)
 		nmf = DictionaryLearning(n_components = W_pinv.shape[0], random_state=0)
 		reprsn = nmf.fit_transform(Sapprox)	
-		print "...and factorized it"
+		print("...and factorized it")
 		reprsn = reprsn.todense()
 
 	if rep_method.normalize:
