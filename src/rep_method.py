@@ -81,9 +81,9 @@ class Graph():
 			weight = None
 		if scipy.sparse.issparse(self.G_adj):
 			if self.directed:
-				nx_graph = nx.from_scipy_sparse_matrix(self.G_adj, create_using=nx.DiGraph())
+				nx_graph = nx.from_scipy_sparse_array(self.G_adj, create_using=nx.DiGraph())
 			else:
-				nx_graph = nx.from_scipy_sparse_matrix(self.G_adj)
+				nx_graph = nx.from_scipy_sparse_array(self.G_adj)
 		else:
 			if self.directed:
 				nx_graph = nx.from_numpy_matrix(self.G_adj, create_using=nx.DiGraph())
